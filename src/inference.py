@@ -1,6 +1,6 @@
 import joblib
 from sklearn.datasets import load_digits
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, log_loss
 from tabulate import tabulate
 
 def inference():
@@ -14,6 +14,7 @@ def inference():
     print(f"📊 Running inference on {X.shape[0]} samples...")
 
     predictions = model.predict(X)
+    prediction_probs = model.predict_proba(X)
 
     # Display first 10 predictions
     results = [[i, y[i], predictions[i]] for i in range(10)]
@@ -46,8 +47,11 @@ def inference():
     print("\n📈 Classification Report:")
     print(tabulate(report_table, headers=["Label", "Precision", "Recall", "F1-Score", "Support"], tablefmt="grid"))
 
+    # Overall metrics
     acc = accuracy_score(y, predictions)
+    loss = log_loss(y, prediction_probs)
     print(f"\n✅ Overall Accuracy: {acc:.4f}")
+    print(f"🧮 Log Loss: {loss:.4f}")
 
 if __name__ == "__main__":
     print("🚀 Starting inference...")
